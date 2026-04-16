@@ -1,0 +1,12 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+venv/
+env/
+*.pyc
+
+# Variables de entorno (¡Muy importante!)
+.env
+.env.local
