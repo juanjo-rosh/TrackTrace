@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 import whisper
 import shutil
@@ -12,6 +13,14 @@ except ImportError:
     imageio_ffmpeg = None
 
 app = FastAPI(title="TrackTrace AI Service", description="Servicio de transcripción de audio usando Whisper", version="1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows your React app to connect
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def ensure_ffmpeg_available():
     if shutil.which("ffmpeg"):
@@ -71,7 +80,7 @@ def generate_setlist_from_text(user_text: str):
     """
 
     response = client.chat.completions.create(
-        model="llama3", # Using the local Meta model
+        model="llama3.2:1b", # Using the local Meta model
         response_format={ "type": "json_object" }, # Forzamos a que la salida sea JSON
         messages=[
             {"role": "system", "content": system_prompt},
